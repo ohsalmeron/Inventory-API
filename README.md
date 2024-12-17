@@ -1,3 +1,80 @@
+# Sistema de Gestión de Inventario
+
+## Preparación del Entorno con Docker
+
+Para este proyecto **no necesitas instalar dependencias localmente**. Utilizaremos Docker y Docker Compose para ejecutar tanto la aplicación FastAPI como la base de datos PostgreSQL en contenedores.
+
+### Requisitos Previos
+
+1. **Docker**: Instálalo desde [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)  
+2. **Docker Compose**: Suele instalarse junto con Docker. Confirma con:  
+   ```bash
+   docker-compose --version
+
+
+
+## Descripción
+
+Este proyecto tiene como objetivo desarrollar una API REST para la gestión del inventario de una cadena de tiendas minoristas. El sistema permitirá la creación, consulta, actualización y eliminación de productos, así como la gestión del inventario por tienda, incluyendo transferencias de stock y alertas por bajo inventario.
+
+## Tecnologías a Utilizar
+
+- **Lenguaje:** Python 3.9+  
+- **Framework:** FastAPI  
+- **Base de Datos:** PostgreSQL  
+- **Contenedores:** Docker y Docker Compose  
+- **Documentación API:** OpenAPI/Swagger (generada automáticamente por FastAPI)  
+- **Testing:** Pytest (unitarias e integración), herramientas de carga (ej: Locust, Artillery)
+- **Logs:** Formato JSON estructurado
+
+Esta combinación se eligió porque:
+- FastAPI facilita el desarrollo rápido de APIs siguiendo el estándar OpenAPI, con documentación automática.
+- PostgreSQL es una base de datos relacional robusta, que soporta transacciones y facilita el manejo de datos críticos.
+- Docker y Docker Compose simplifican la configuración y despliegue del entorno.
+
+## Arquitectura y Alcance
+
+El proyecto se basa en una arquitectura por capas:
+
+- **Capa de Presentación (API - FastAPI):** Aquí se exponen los endpoints REST.  
+- **Capa de Negocio (Servicios):** Implementa la lógica de negocio, validaciones y reglas de la aplicación.  
+- **Capa de Datos (Repositorios):** Abstracción de acceso a la base de datos, consultas, inserciones y actualizaciones.  
+- **Base de Datos (PostgreSQL):** Almacenamiento persistente. Se definirán índices para consultas frecuentes y se utilizarán transacciones en operaciones críticas.
+
+**Principales Endpoints:**
+
+- **Gestión de Productos**  
+  - `GET /api/products`: Lista productos con filtros (categoría, precio, stock) y paginación.  
+  - `GET /api/products/{id}`: Obtener detalles de un producto.  
+  - `POST /api/products`: Crear un nuevo producto (validando campos obligatorios).  
+  - `PUT /api/products/{id}`: Actualizar un producto existente.  
+  - `DELETE /api/products/{id}`: Eliminar un producto.
+
+- **Gestión de Inventario**  
+  - `GET /api/stores/{id}/inventory`: Listar inventario por tienda.  
+  - `POST /api/inventory/transfer`: Transferir productos entre tiendas, validando stock disponible.  
+  - `GET /api/inventory/alerts`: Listar productos con stock bajo (por debajo de `minStock`).
+
+**Pruebas y Calidad:**
+- Tests unitarios con al menos 80% de cobertura.
+- Tests de integración para flujos críticos (ej. transferencia de productos).
+- Tests de carga (500 req/seg) para asegurar rendimiento.
+
+**Despliegue:**
+- Se utilizarán Dockerfile y docker-compose.
+- Variables de entorno para configuración.
+- Documentación con OpenAPI/Swagger generada automáticamente.
+- Logs estructurados en JSON.
+- Instrucciones de despliegue en entornos en la nube (AWS/GCP/Azure/DigitalOcean).
+- Scripts de inicialización de la BD y configuración de backups.
+
+
+
+
+
+
+
+
 README con:
 ○ Instrucciones de instalación
 ○ Documentación de API
@@ -18,13 +95,23 @@ En Archlinux
 sudo pacman -S python
 sudo apt install python
 
-
 Usando un entorno virtual para mayor seguridad
 
-´
+´´´bash
 python -m venv venv
 source venv/bin/activate
-´
+pip install --upgrade pip
+´´´ 
+pip install fastapi uvicorn[standard] sqlalchemy psycopg2-binary python-dotenv pydantic
+
+
+fastapi: framework para la API.
+uvicorn[standard]: servidor ASGI para correr FastAPI.
+sqlalchemy: ORM para PostgreSQL.
+psycopg2-binary: conector de Python a PostgreSQL.
+python-dotenv: para cargar variables de entorno desde archivos .env.
+pydantic: para validación y modelado de datos.
+
 
 Estructura inicial
 
@@ -85,3 +172,10 @@ docker exec -i inventory_db psql -U postgres -d inventory < init.sql
 docker/init.sql
 
 
+
+
+
+FastAPI generará automáticamente la documentación en:
+
+http://localhost:8000/docs (Swagger UI)
+http://localhost:8000/redoc (Redoc)
