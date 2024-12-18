@@ -19,6 +19,16 @@ def create_inventory(item: InventoryCreate, db: Session = Depends(get_db)):
     """
     Crear un nuevo registro de inventario.
     """
+    # Validar que el producto exista
+    product = db.query(Product).filter(Product.id == item.product_id).first()
+    if not product:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "error",
+                "message": f"Product with ID {item.product_id} does not exist"
+            }
+        )
     try:
         db_item = Inventory(**item.model_dump())
         db.add(db_item)
@@ -170,12 +180,21 @@ def transfer_product(transfer: MovementCreate, db: Session = Depends(get_db)):
         .first()
     )
 
-    if not source_inventory or source_inventory.quantity < transfer.quantity:
+    if not source_inventory:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "status": "error",
+                "message": f"No inventory found for product {transfer.product_id} in store {transfer.source_store_id}"
+            }
+        )
+
+    if source_inventory.quantity < transfer.quantity:
         raise HTTPException(
             status_code=400,
             detail={
                 "status": "error",
-                "message": "Insufficient stock in source store"
+                "message": f"Insufficient stock in store {transfer.source_store_id}. Available: {source_inventory.quantity}, Required: {transfer.quantity}"
             }
         )
 
@@ -240,3 +259,25 @@ def transfer_product(transfer: MovementCreate, db: Session = Depends(get_db)):
                 "message": "An error occurred during the transfer process"
             }
         )
+
+@router.get("/debug/inventory", response_model=dict)
+def debug_list_inventory(db: Session = Depends(get_db)):
+    """
+    Endpoint temporal para listar todo el inventario directamente.
+    """
+    inventory = db.query(Inventory).all()
+    if not inventory:
+        raise HTTPException(status_code=404, detail="No inventory found")
+
+    return {
+        "status": "success",
+        "data": [
+            {
+                "product_id": inv.product_id,
+                "store_id": inv.store_id,
+                "quantity": inv.quantity,
+                "min_stock": inv.min_stock,
+            }
+            for inv in inventory
+        ],
+    }

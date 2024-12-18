@@ -33,9 +33,9 @@ services:
     depends_on:
       - db
     env_file:
-      - .env  # Use the same .env file
+      - .env
     environment:
-      PYTHONPATH: /app  # Ensure the app directory is in the Python path
+      PYTHONPATH: /app
     volumes:
       - ./coverage:/app/htmlcov
     command: ["pytest", "--cov=app", "--cov-report=html", "tests/"]
