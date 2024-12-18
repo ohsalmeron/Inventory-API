@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:14
+    container_name: inventory_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory
+    ports:
+      - "5432:5432"
+    volumes:
+      - inventory_db_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    build: .
+    container_name: inventory_api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  tests:
+    build:
+      context: .
+      args:
+        MODE: test
+    container_name: inventory_api_test
+    depends_on:
+      - db
+    env_file:
+      - .env  # Use the same .env file
+    environment:
+      PYTHONPATH: /app  # Ensure the app directory is in the Python path
+    volumes:
+      - ./coverage:/app/htmlcov
+    command: ["pytest", "--cov=app", "--cov-report=html", "tests/"]
+
+volumes:
+  inventory_db_data:
+  coverage:

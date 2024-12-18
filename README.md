@@ -1,18 +1,5 @@
 # Sistema de Gestión de Inventario
 
-## Preparación del Entorno con Docker
-
-Para este proyecto **no necesitas instalar dependencias localmente**. Utilizaremos Docker y Docker Compose para ejecutar tanto la aplicación FastAPI como la base de datos PostgreSQL en contenedores.
-
-### Requisitos Previos
-
-1. **Docker**: Instálalo desde [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)  
-2. **Docker Compose**: Suele instalarse junto con Docker. Confirma con:  
-   ```bash
-   docker-compose --version
-
-
-
 ## Descripción
 
 Este proyecto tiene como objetivo desarrollar una API REST para la gestión del inventario de una cadena de tiendas minoristas. El sistema permitirá la creación, consulta, actualización y eliminación de productos, así como la gestión del inventario por tienda, incluyendo transferencias de stock y alertas por bajo inventario.
@@ -27,10 +14,41 @@ Este proyecto tiene como objetivo desarrollar una API REST para la gestión del 
 - **Testing:** Pytest (unitarias e integración), herramientas de carga (ej: Locust, Artillery)
 - **Logs:** Formato JSON estructurado
 
-Esta combinación se eligió porque:
-- FastAPI facilita el desarrollo rápido de APIs siguiendo el estándar OpenAPI, con documentación automática.
-- PostgreSQL es una base de datos relacional robusta, que soporta transacciones y facilita el manejo de datos críticos.
-- Docker y Docker Compose simplifican la configuración y despliegue del entorno.
+## Preparación del Entorno con Docker
+
+Para este proyecto **no necesitas instalar dependencias localmente**. Utilizaremos Docker y Docker Compose para ejecutar tanto la aplicación FastAPI como la base de datos PostgreSQL en contenedores.
+
+### Requisitos Previos
+
+1. **Docker**: Instálalo desde [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)  
+2. **Docker Compose**: Suele instalarse junto con Docker. Confirma con:  
+   ```bash
+   docker-compose --version
+
+## Configuración de la Base de Datos
+
+### 1. Levantar PostgreSQL con Docker Compose
+
+El proyecto incluye un archivo `docker-compose.yml` para configurar la base de datos PostgreSQL. Sigue estos pasos:
+
+1. **Ejecuta Docker Compose:**
+   ```bash
+   docker-compose up -d
+
+
+Verificar la Base de Datos y Tablas
+Queremos asegurarnos de que el script init.sql que creamos anteriormente se ejecutó correctamente y las tablas existen.
+
+Conéctate al contenedor PostgreSQL usando psql:
+
+   ```bash
+  docker exec -it inventory_db psql -U postgres -d inventory
+
+
+
+
+
+
 
 ## Arquitectura y Alcance
 

@@ -4,5 +4,7 @@ sqlalchemy
 psycopg2-binary
 python-dotenv
 pydantic
+python-json-logger
 pytest
-requests
+pytest-cov
+httpx
