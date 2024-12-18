@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, UUID4
+from pydantic import BaseModel, Field, UUID4, ConfigDict
 from typing import Optional
 from uuid import UUID
 
@@ -17,9 +17,8 @@ class InventoryUpdate(BaseModel):
 
 class InventoryResponse(InventoryBase):
     id: UUID
-
-    class Config:
-        from_attributes = True
+    
+    model_config = ConfigDict(from_attributes=True)
 
 class InventoryByStoreResponse(BaseModel):
     product_id: UUID4
@@ -30,5 +29,4 @@ class InventoryByStoreResponse(BaseModel):
     sku: str
     quantity: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

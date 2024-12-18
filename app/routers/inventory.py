@@ -20,7 +20,7 @@ def create_inventory(item: InventoryCreate, db: Session = Depends(get_db)):
     Crear un nuevo registro de inventario.
     """
     try:
-        db_item = Inventory(**item.dict())
+        db_item = Inventory(**item.model_dump())
         db.add(db_item)
         db.commit()
         db.refresh(db_item)

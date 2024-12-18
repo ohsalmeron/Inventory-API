@@ -50,7 +50,7 @@ def create_movement(movement: MovementCreate, db: Session = Depends(get_db)):
             }
         )
     try:
-        db_movement = Movement(**movement.dict())
+        db_movement = Movement(**movement.model_dump())
         db.add(db_movement)
         db.commit()
         db.refresh(db_movement)

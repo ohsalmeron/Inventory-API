@@ -41,7 +41,7 @@ def list_products(
     return {
         "status": "success",
         "message": "Products retrieved successfully",
-        "data": [ProductResponse.model_validate(product).dict() for product in products]
+        "data": [ProductResponse.model_validate(product).model_dump() for product in products]
     }
 
 # Obtener un producto por ID
@@ -56,7 +56,7 @@ def get_product(product_id: UUID, db: Session = Depends(get_db)):
     return {
         "status": "success",
         "message": "Product retrieved successfully",
-        "data": ProductResponse.model_validate(product).dict()
+        "data": ProductResponse.model_validate(product).model_dump()
     }
 
 # Crear un nuevo producto
@@ -68,14 +68,14 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
             status_code=400,
             detail={"status": "error", "message": "A product with this SKU already exists"}
         )
-    db_product = Product(**product.dict())
+    db_product = Product(**product.model_dump())
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
     return {
         "status": "success",
         "message": "Product created successfully",
-        "data": ProductResponse.model_validate(db_product).dict()
+        "data": ProductResponse.model_validate(db_product).model_dump()
     }
 
 # Actualizar un producto existente
@@ -87,14 +87,14 @@ def update_product(product_id: UUID, updates: ProductUpdate, db: Session = Depen
             status_code=404,
             detail={"status": "error", "message": "Product not found"}
         )
-    for field, value in updates.dict(exclude_unset=True).items():
+    for field, value in updates.model_dump(exclude_unset=True).items():
         setattr(db_product, field, value)
     db.commit()
     db.refresh(db_product)
     return {
         "status": "success",
         "message": "Product updated successfully",
-        "data": ProductResponse.model_validate(db_product).dict()
+        "data": ProductResponse.model_validate(db_product).model_dump()
     }
 
 # Eliminar un producto
