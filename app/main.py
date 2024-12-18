@@ -24,7 +24,7 @@ logger = logging.getLogger("inventory_api")
 app = FastAPI(
     title="Inventory Management API",
     version="1.0",
-    description="API para gestionar productos, inventario y movimientos en una cadena de tiendas minoristas."
+    description="API para gestionar productos, inventario y movimientos."
 )
 
 # Middleware: Manejo global de errores

@@ -38,11 +38,21 @@ def list_products(
                      .having(func.sum(Inventory.quantity) >= stock_min)
 
     products = query.offset(offset).limit(limit).all()
+
+    # Manejar respuesta vacía
+    if not products:
+        return {
+            "status": "success",
+            "message": "No products found",
+            "data": []
+        }
+
     return {
         "status": "success",
         "message": "Products retrieved successfully",
         "data": [ProductResponse.model_validate(product).model_dump() for product in products]
     }
+
 
 # Obtener un producto por ID
 @router.get("/{product_id}", response_model=dict)
@@ -62,12 +72,14 @@ def get_product(product_id: UUID, db: Session = Depends(get_db)):
 # Crear un nuevo producto
 @router.post("/", response_model=dict, status_code=201)
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
-    # Validar SKU único
-    if db.query(Product).filter(Product.sku == product.sku).first():
+    # Validar SKU único (insensible a mayúsculas/minúsculas)
+    if db.query(Product).filter(func.lower(Product.sku) == product.sku.lower()).first():
         raise HTTPException(
             status_code=400,
             detail={"status": "error", "message": "A product with this SKU already exists"}
         )
+
+    # Crear y guardar el producto
     db_product = Product(**product.model_dump())
     db.add(db_product)
     db.commit()
@@ -77,6 +89,8 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
         "message": "Product created successfully",
         "data": ProductResponse.model_validate(db_product).model_dump()
     }
+
+
 
 # Actualizar un producto existente
 @router.put("/{product_id}", response_model=dict)
@@ -109,3 +123,4 @@ def delete_product(product_id: UUID, db: Session = Depends(get_db)):
     db.delete(db_product)
     db.commit()
     return {"status": "success", "message": "Product deleted successfully"}
+

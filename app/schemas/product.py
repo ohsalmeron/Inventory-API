@@ -5,8 +5,8 @@ from uuid import UUID
 class ProductBase(BaseModel):
     name: str
     description: Optional[str] = None
-    category: Optional[str] = None
-    price: Optional[float] = None
+    category: str
+    price: Optional[float] = Field(ge=0, description="El precio debe ser mayor o igual a 0")
     sku: str
 
 class ProductCreate(ProductBase):
