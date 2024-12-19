@@ -100,52 +100,25 @@ def seed_products(db_session):
     db_session.commit()
     return products
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def seed_inventory(db_session, seed_products):
-    inventories = [
-        Inventory(
-            product_id=seed_products[0].id,  # Varilla de Acero
-            store_id="store1",
-            quantity=10,
-            min_stock=5
-        ),
-        Inventory(
-            product_id=seed_products[1].id,  # Lámina Galvanizada
-            store_id="store1",
-            quantity=15,
-            min_stock=10
-        ),
-        Inventory(
-            product_id=seed_products[2].id,  # Perfil IPR
-            store_id="store1",
-            quantity=5,
-            min_stock=3
-        ),
-        Inventory(
-            product_id=seed_products[3].id,  # Placa de Acero
-            store_id="store2",
-            quantity=2,
-            min_stock=5
-        ),
-        Inventory(
-            product_id=seed_products[4].id,  # Producto Gratis
-            store_id="store2",
-            quantity=0,
-            min_stock=1
-        ),
-        Inventory(
-            product_id=seed_products[5].id,  # Producto Premium
-            store_id="store2",
-            quantity=1,
-            min_stock=0
-        )
+    inventory_data = [
+        {
+            "id": str(uuid.uuid4()),
+            "product_id": seed_products[0].id,  # Relacionar con un producto existente
+            "store_id": "store1",
+            "quantity": 20,
+            "min_stock": 5
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_id": seed_products[1].id,
+            "store_id": "store1",
+            "quantity": 3,  # Stock bajo
+            "min_stock": 10
+        }
     ]
+    inventories = [Inventory(**data) for data in inventory_data]
     db_session.add_all(inventories)
     db_session.commit()
-
-    # Log para verificar
-    print("Seed Inventory Data:")
-    for inv in inventories:
-        print(f"Product ID: {inv.product_id}, Store ID: {inv.store_id}, Quantity: {inv.quantity}, Min Stock: {inv.min_stock}")
-
-    return inventories
+    return inventory_data
