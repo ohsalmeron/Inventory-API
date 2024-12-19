@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "62905677-9bb0-448e-8077-a257352cb163",
+		"name": "Inventory Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32067758"
+	},
+	"item": [
+		{
+			"name": "Listado de productos con filtros",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "price_min",
+							"value": "100",
+							"disabled": true
+						},
+						{
+							"key": "price_max",
+							"value": "500",
+							"disabled": true
+						},
+						{
+							"key": "stock_min",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Detalles de un producto por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/products/230d937e-d2ac-4100-9978-e52596b0d304",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						"230d937e-d2ac-4100-9978-e52596b0d304"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear un producto",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Producto de Prueba a borrar\",\n    \"description\": \"Este es un producto de prueba para la API.\",\n    \"category\": \"Electrónica\",\n    \"price\": 150.50,\n    \"sku\": \"SKU-123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualización de un producto",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Producto de Prueba Actualizado\",\n    \"description\": \"Este es un producto actualizado para la API.\",\n    \"category\": \"Electrónica\",\n    \"price\": 180.5,\n    \"sku\": \"SKU-123456\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/products/230d937e-d2ac-4100-9978-e52596b0d304",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						"230d937e-d2ac-4100-9978-e52596b0d304"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminación de un producto",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/products/8bbb0222-29de-4d09-8c47-1a28bc19d1d6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						"8bbb0222-29de-4d09-8c47-1a28bc19d1d6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear inventario para tienda",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"230d937e-d2ac-4100-9978-e52596b0d304\",\n    \"store_id\": \"store1\",\n    \"quantity\": 50,\n    \"min_stock\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/inventory/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"inventory",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar inventario por tienda",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/inventory/stores/store1/inventory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"inventory",
+						"stores",
+						"store1",
+						"inventory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar productos con stock bajo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"success\",\n    \"message\": \"Low stock alerts retrieved successfully\",\n    \"data\": [\n        {\n            \"product_id\": \"230d937e-d2ac-4100-9978-e52596b0d304\",\n            \"name\": \"Producto de Prueba Actualizado\",\n            \"description\": \"Este es un producto actualizado para la API.\",\n            \"category\": \"Electrónica\",\n            \"price\": 180.5,\n            \"sku\": \"SKU-123456\",\n            \"quantity\": 50\n        }\n    ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/inventory/alerts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"inventory",
+						"alerts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transferencia de productos entre tiendas",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"product_id\": \"230d937e-d2ac-4100-9978-e52596b0d304\",\n  \"source_store_id\": \"store1\",\n  \"target_store_id\": \"store2\",\n  \"quantity\": 10,\n  \"type\": \"TRANSFER\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/inventory/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"inventory",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
