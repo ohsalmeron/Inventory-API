@@ -54,6 +54,60 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
   ls coverage/
   ```
 
+### 2. **Documentación de la API**
+
+- La API cuenta con documentación generada automáticamente en formato OpenAPI (Swagger).  
+- Puedes acceder a la documentación desde tu navegador en la siguiente URL: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Si necesitas el esquema JSON de la API, está disponible en: [http://localhost:8000/openapi.json](http://localhost:8000/openapi.json)
+- También se incluye una **Colección de POSTMAN** en la raíz del directorio `Inventory Management API.postman_collection.json`
+
+### 3. **Pruebas de Carga con Locust**
+
+- Accede a la interfaz de usuario de Locust para configurar y ejecutar pruebas de carga en la siguiente URL:  
+  [http://localhost:8089/](http://localhost:8089/)
+
+- Se recomienda configurar las pruebas siguiendo las mejores prácticas:
+  - **Usuarios iniciales**: 10  
+  - **Incremento gradual**: Hasta un máximo de 100 usuarios simultáneos.
+  - **URL del servicio de la API** para las pruebas de carga: `http://inventory_api:8000`
+
+### 4. **Backups Automatizados**
+
+- El servicio de respaldos automáticos está configurado con un **cron** dentro del contenedor `inventory_db_backup`.  
+- Para verificar la programación de los respaldos, ingresa al contenedor y ejecuta el siguiente comando:
+
+  ```bash
+  docker exec -it inventory_db_backup bash
+  crontab -l
+  ```
+
+- Los respaldos se generan diariamente en el directorio /backups dentro del contenedor.
+
+Cada archivo tiene un nombre con formato: `inventory_backup_YYYYMMDD_HHMMSS.sql.`
+
+Si necesitas realizar un respaldo manual, usa este comando:
+
+  ```bash
+  docker exec -it inventory_db_backup bash
+  PGPASSWORD=postgres pg_dump -U postgres -h inventory_db inventory > /backups/respaldo_manual.sql
+  ```
+
+- Los respaldos generados pueden revisarse en el directorio de backups:
+
+  ```bash
+  docker exec -it inventory_db_backup bash
+  ls /backups
+  ```
+
+  
+
+
+
+
+
+
+
+
 
 
 
