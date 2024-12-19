@@ -22,14 +22,39 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
    git clone https://github.com/ohsalmeron/Inventory-API.git
    cd Inventory-API
 
-### Levantar los contenedores
-
-   - Ejecuta el siguiente comando para construir y levantar los contenedores:
+### Levantar los Contenedores
+1. **Ejecutar el comando principal**  
+   - Construye y levanta los contenedores con un solo comando:
      ```bash
      docker-compose up --build
      ```
 
-El proyecto incluye un archivo `.env`, con las variables de entorno necesarias, además de una lista de requerimientos para python con las librerías utilizadas.
+2. **Alta de servicios**  
+   - El proyecto incluye un archivo `init.sql` para inicializar la base de datos, `.env` con las variables de entorno necesarias, así como los requerimientos de Python en `requirements.txt`.  
+   - Una vez ejecutado el comando anterior, todos los servicios estarán activos automáticamente:
+     - Base de datos PostgreSQL
+     - Restful API de inventario
+     - Sistema de respaldos automáticos
+     - Pruebas automatizadas
+     - Herramienta de pruebas de carga (Locust)
+
+## Verificación de Componentes
+
+### 1. **Pruebas Unitarias**
+
+- Las pruebas unitarias se ejecutan automáticamente al levantar los contenedores con `docker-compose up`.  
+- Los resultados de las pruebas se muestran directamente en la consola.  
+- Puedes revisar el código de las pruebas en la carpeta `/tests/` ejecutando:
+  ```bash
+  ls tests/
+  ```
+
+- Los reportes de cobertura se generan en el directorio coverage/. Para verificar su contenido, ejecuta:
+  ```bash
+  ls coverage/
+  ```
+
+
 
 
 
