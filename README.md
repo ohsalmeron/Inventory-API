@@ -168,7 +168,7 @@ Mostrar todas las tablas:
        Para edge tecnologies se recomienda usar Rust o Motoko para combinar lógica y bases de datos con seguridad criptográfica.
 
 2. **Base de Datos**:
-   - Se utilizó **PostgreSQL** por su capacidad de manejar índices complejos y optimizar consultas.
+   - Se utilizó **PostgreSQL** por la familiaridad con bases de datos relacionales, aunque MongoDB también es viable en este tipo de proyectos.
 
 3. **Infraestructura Dockerizada**:
    - Uso de **Docker Compose** para orquestar los servicios: base de datos, API, respaldos y pruebas de carga.
@@ -229,11 +229,11 @@ graph LR
 2. **Subir el Contenedor al Registro**:
    - Taggear la imagen para el registro de contenedores:
      ```bash
-     docker tag inventory_api gcr.io/<your-project-id>/inventory-api:latest
+     docker tag inventory_api gcr.io/PROYECTO/inventory-api:latest
      ```
    - Subir la imagen al registro de contenedores:
      ```bash
-     docker push gcr.io/<your-project-id>/inventory-api:latest
+     docker push gcr.io/PROYECTO/inventory-api:latest
      ```
 
 3. **Desplegar con Kubernetes**:
@@ -255,10 +255,9 @@ graph LR
          spec:
            containers:
            - name: inventory-api
-             image: gcr.io/<your-project-id>/inventory-api:latest
+             image: gcr.io/PROYECTO/inventory-api:latest
              ports:
              - containerPort: 8000
-   ---
    apiVersion: v1
    kind: Service
    metadata:
@@ -271,6 +270,8 @@ graph LR
        port: 80
        targetPort: 8000
      type: LoadBalancer
+
+     
      ```
    - Aplicar la configuración:
      ```bash
