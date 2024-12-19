@@ -163,7 +163,7 @@ Mostrar todas las tablas:
    - **Lenguaje**: Python 3.10.
    - **Framework**: FastAPI por su eficiencia, soporte para OpenAPI/Swagger y facilidad de desarrollo para APIs RESTful.
 
-       Python fue elegido basado en la entrevista previa en donde se solicitaba, sin embargo también se puede realizar en .NET, NodeJS/Express o Java/SpringBoot de acuerdo a los requerimientos técnicos de la empresa.
+       **Python fue elegido basado en la primera entrevista** en donde se solicitaba, sin embargo también se puede realizar en **.NET, NodeJS/Express o Java/Spring Boot** de acuerdo a los requerimientos técnicos de la empresa. Otros frameworks de Python disponibles que puedo manejar son Flask y Django.
 
        Para edge tecnologies se recomienda usar Rust o Motoko para combinar lógica y bases de datos con seguridad criptográfica.
 
@@ -211,3 +211,134 @@ graph LR
 - La documentación está accesible a través de una interfaz Swagger generada automáticamente.
 - Pruebas unitarias y de integración validan la funcionalidad de la API.
 
+## Recomendaciones de Despliegue en la Nube
+
+### Opción 1: Despliegue con Kubernetes en Google Cloud/AWS/Azure
+
+**Ventajas de Usar Kubernetes**
+1. **Escalabilidad Automática**: Kubernetes permite escalar horizontal y verticalmente los recursos según la carga del sistema.
+2. **Gestión Simplificada**: Kubernetes automatiza actualizaciones, parches y monitoreo del clúster, reduciendo la sobrecarga operativa.
+3. **Alta Disponibilidad**: Si alguna app llegara a fallar, se replica el pod original automáticamente para mantener el servicio activo.
+
+**Instrucciones de Despliegue**:
+1. **Requerimientos Previos**:
+   - Configurar una cuenta en Google Cloud, AWS o Azure.
+   - Tener configuradas las herramientas CLI necesarias (`kubectl`, `gcloud` o las equivalentes en otras plataformas).
+   - Crear un clúster de Kubernetes con al menos 3 nodos (2 CPU, 8 GB RAM recomendados por nodo).
+
+2. **Subir el Contenedor al Registro**:
+   - Taggear la imagen para el registro de contenedores:
+     ```bash
+     docker tag inventory_api gcr.io/<your-project-id>/inventory-api:latest
+     ```
+   - Subir la imagen al registro de contenedores:
+     ```bash
+     docker push gcr.io/<your-project-id>/inventory-api:latest
+     ```
+
+3. **Desplegar con Kubernetes**:
+   - Crear un archivo de configuración `deployment.yaml`:
+     ```yaml
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       name: inventory-api
+     spec:
+       replicas: 3
+       selector:
+         matchLabels:
+           app: inventory-api
+       template:
+         metadata:
+           labels:
+             app: inventory-api
+         spec:
+           containers:
+           - name: inventory-api
+             image: gcr.io/<your-project-id>/inventory-api:latest
+             ports:
+             - containerPort: 8000
+   ---
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: inventory-api-service
+   spec:
+     selector:
+       app: inventory-api
+     ports:
+     - protocol: TCP
+       port: 80
+       targetPort: 8000
+     type: LoadBalancer
+     ```
+   - Aplicar la configuración:
+     ```bash
+     kubectl apply -f deployment.yaml
+     ```
+
+4. **Verificar el Despliegue**:
+   - Listar los pods:
+     ```bash
+     kubectl get pods
+     ```
+   - Obtener la IP del balanceador de carga para acceder a la API:
+     ```bash
+     kubectl get svc inventory-api-service
+     ```
+
+---
+
+### Opción 2: Despliegue con Docker en DigitalOcean
+
+**Ventajas de Usar DigitalOcean con Docker**
+1. **Simplicidad**: Un droplet con Docker permite un despliegue directo y rápido.
+2. **Costo Eficiente**: Ideal para proyectos pequeños o pruebas con requerimientos moderados.
+3. **Flexibilidad**: Control total sobre la configuración del servidor.
+
+**Instrucciones de Despliegue**:
+1. **Requerimientos Previos**:
+   - Crear una cuenta en [DigitalOcean](https://www.digitalocean.com).
+   - Configurar acceso SSH y subir tu llave pública a DigitalOcean.
+
+2. **Crear un Droplet**:
+   - Seleccionar la imagen de Ubuntu (20.04 o superior) con al menos 2 CPUs y 4 GB de RAM.
+   - Asociar la llave SSH configurada previamente.
+
+3. **Instalar Docker y Docker Compose**:
+   - Conectar al droplet por SSH:
+     ```bash
+     ssh root@<DROPLET_IP>
+     ```
+   - Instalar Docker:
+     ```bash
+     apt update && apt install -y docker.io
+     ```
+   - Instalar Docker Compose:
+     ```bash
+     apt install -y docker-compose
+     ```
+
+4. **Clonar el Proyecto y Levantar los Contenedores**:
+   - Clonar el repositorio y construir los contenedores:
+     ```bash
+     git clone <https://github.com/ohsalmeron/Inventory-API.git>
+     cd Inventory-API
+     docker-compose up --build -d
+     ```
+
+5. **Acceder a la API**:
+   - Abrir la IP del droplet en tu navegador:
+     ```plaintext
+     http://<DROPLET_IP>:8000
+     ```
+
+
+¿Cuál opción se adapta más a tus necesidades?
+
+Soy Omar trabajo actualmente como Fullstack developer, soy un empleado versátil en quién puedes confiar para resolver temas de desarrollo, debuggeo, deployment, consultoría y arquitectura, con más de 12 años de experiencia en diferentes lenguajes y stacks, utilizo Inteligencia Artificial como una herramienta para optimizar y agilizar procesos.
+
+Sigamos en contacto:
+
+Mi correo es `ohsalmeron@gmail.com`
+Mi teléfono personal es `+52 3338088434`
