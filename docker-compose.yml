@@ -23,6 +23,14 @@ services:
       - db
     env_file:
       - .env
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: "8g"
+        reservations:
+          cpus: "2.0"
+          memory: "4g"
 
   tests:
     build:
@@ -40,6 +48,19 @@ services:
       - ./coverage:/app/htmlcov
     command: ["pytest", "--cov=app", "--cov-report=html", "tests/"]
 
+  locust:
+    image: locustio/locust
+    container_name: locust
+    ports:
+      - "8089:8089"
+    command: -f /app/locustfile.py
+    volumes:
+      - ./locustfile.py:/app/locustfile.py
+    depends_on:
+      - api
+
 volumes:
   inventory_db_data:
   coverage:
+
+
