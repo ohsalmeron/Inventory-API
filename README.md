@@ -40,19 +40,49 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
 
 ## Verificación de Componentes
 
-### 1. **Pruebas Unitarias**
+### 1. **Pruebas Automatizadas**
 
-- Las pruebas unitarias se ejecutan automáticamente al levantar los contenedores con `docker-compose up`.  
-- Los resultados de las pruebas se muestran directamente en la consola.  
-- Puedes revisar el código de las pruebas en la carpeta `/tests/` ejecutando:
-  ```bash
-  ls tests/
-  ```
+- Las pruebas automatizadas se ejecutan automáticamente al levantar los contenedores. Los resultados se muestran en la consola.
 
-- Los reportes de cobertura se generan en el directorio coverage/. Para verificar su contenido, ejecuta:
-  ```bash
-  ls coverage/
-  ```
+1. **Ver los resultados de las pruebas**:
+   - Levanta los contenedores con el comando:
+     ```bash
+     docker-compose up --build
+     ```
+   - Observa los resultados de las pruebas unitarias e integración en la consola. Ejemplo:
+     ```plaintext
+     ============================= test session starts ==============================
+     platform linux -- Python 3.10.16, pytest-8.3.4, pluggy-1.5.0
+     rootdir: /app
+     plugins: anyio-4.7.0, cov-6.0.0
+     collected 27 items
+
+     tests/test_system.py ...........................                         [100%]
+
+     ============================== 27 passed in 0.55s ==============================
+     ```
+
+2. **Explorar el código de las pruebas**:
+   - Puedes revisar el código fuente de las pruebas en el directorio `tests/`:
+     ```bash
+     tree tests/
+     ```
+
+3. **Detalles de cobertura**:
+   - Los reportes de cobertura se generan automáticamente y están disponibles en el directorio `coverage/`:
+     ```bash
+     ls coverage/
+     ```
+   - Abre el archivo `index.html` en un navegador para visualizar el reporte:
+     ```bash
+     open coverage/index.html
+     ```
+     (En sistemas Linux, puedes usar `xdg-open` en lugar de `open`).
+
+- **Notas**:
+  - Las pruebas abarcan casos unitarios e integración para los endpoints principales.
+  - Cualquier fallo en las pruebas será reportado directamente en la consola durante el despliegue.
+
 
 ### 2. **Documentación de la API**
 
@@ -115,6 +145,8 @@ Mostrar todas las tablas:
   ```bash
   \dt
   ```
+
+- El contenedor inventory_db contiene toda la información de productos, inventarios y movimientos.
 
 
 
