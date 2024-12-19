@@ -258,18 +258,18 @@ graph LR
              image: gcr.io/PROYECTO/inventory-api:latest
              ports:
              - containerPort: 8000
-   apiVersion: v1
-   kind: Service
-   metadata:
-     name: inventory-api-service
-   spec:
-     selector:
-       app: inventory-api
-     ports:
-     - protocol: TCP
-       port: 80
-       targetPort: 8000
-     type: LoadBalancer
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: inventory-api-service
+        spec:
+          selector:
+            app: inventory-api
+          ports:
+          - protocol: TCP
+            port: 80
+            targetPort: 8000
+          type: LoadBalancer
    ```
 
    - Aplicar la configuración:
@@ -330,7 +330,7 @@ graph LR
 5. **Acceder a la API**:
    - Abrir la IP del droplet en tu navegador:
      ```plaintext
-     http://<DROPLET_IP>:8000
+     http://IP:PUERTO
      ```
 
 
