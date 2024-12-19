@@ -42,13 +42,10 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
 
 ### 1. **Pruebas Automatizadas**
 
-- Las pruebas automatizadas se ejecutan automáticamente al levantar los contenedores. Los resultados se muestran en la consola.
+- Las pruebas se ejecutan automáticamente al levantar los contenedores. Los resultados se muestran en la consola.
 
 1. **Ver los resultados de las pruebas**:
-   - Levanta los contenedores con el comando:
-     ```bash
-     docker-compose up --build
-     ```
+
    - Observa los resultados de las pruebas unitarias e integración en la consola. Ejemplo:
      ```plaintext
      ============================= test session starts ==============================
@@ -73,11 +70,6 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
      ```bash
      ls coverage/
      ```
-   - Abre el archivo `index.html` en un navegador para visualizar el reporte:
-     ```bash
-     open coverage/index.html
-     ```
-     (En sistemas Linux, puedes usar `xdg-open` en lugar de `open`).
 
 - **Notas**:
   - Las pruebas abarcan casos unitarios e integración para los endpoints principales.
@@ -148,59 +140,54 @@ Mostrar todas las tablas:
 
 - El contenedor inventory_db contiene toda la información de productos, inventarios y movimientos.
 
+## Decisiones Tomadas Durante el Desarrollo
 
+### Tecnologías utilizadas
 
+1. **Lenguaje y Framework**:
+   - **Lenguaje**: Python 3.10.
+   - **Framework**: FastAPI por su eficiencia, soporte para OpenAPI/Swagger y facilidad de desarrollo para APIs RESTful.
 
+       Python fue elegido basado en la entrevista previa en donde se solicitaba, sin embargo también se puede realizar en .NET, NodeJS/Express o Java/SpringBoot de acuerdo a los requerimientos técnicos de la empresa.
 
+       Para edge tecnologies se recomienda usar Rust o Motoko para combinar lógica y bases de datos con seguridad criptográfica.
 
+2. **Base de Datos**:
+   - Se utilizó **PostgreSQL** por su capacidad de manejar índices complejos y optimizar consultas.
 
+3. **Infraestructura Dockerizada**:
+   - Uso de **Docker Compose** para orquestar los servicios: base de datos, API, respaldos y pruebas de carga.
+   - Contenedores configurados para ser portables y de fácil despliegue en entornos locales o en la nube.
 
+4. **Gestión de Respaldos**:
+   - Configuración de un contenedor dedicado para ejecutar respaldos automáticos usando `pg_dump` y tareas programadas con `cron`.
+   - Opción de realizar respaldos manuales en caso de requerirse.
+   Se utiliza un contenedor por separado para cubrir casos single points of failure.
 
-## Tecnologías utilizadas
+5. **Pruebas**:
+   - Cobertura amplia para pruebas unitarias automatizadas utilizando `pytest`, usando Seeds y también datos guardados y parseados dentro de las funciones.
+   - Pruebas de carga manuales implementadas con **Locust** para asegurar la escalabilidad de la API bajo condiciones de alta concurrencia.
 
-- **Lenguaje:** Python
-- **Framework:** FastAPI
-- **Base de Datos:** PostgreSQL
-- **Contenedores:** Docker y Docker Compose  
-- **Documentación API:** OpenAPI/Swagger (generada automáticamente por FastAPI)  
-- **Testing:** Pytest (unitarias e integración), Locust como herramientas de carga
-- **Logs:** Formato JSON estructurado
+6. **Documentación**:
+   - Generación automática de documentación en formato `OpenAPI/Swagger` para facilitar la integración de clientes con la API.
 
+7. **Variables de Entorno**:
+   - Gestión centralizada de variables de entorno y librerías a través de `.env` y `requirements.txt` para facilitar la configuración en diferentes entornos.
 
+8. **Logs Estructurados**:
+   - Configuración de logs en formato JSON con `python-json-logger` para integrarse con herramientas de monitoreo y depuración. 
 
-## Preparación del Entorno con Docker
+### Diagrama de Arquitectura
 
-Para este proyecto **no necesitas instalar dependencias localmente**. Utilizaremos Docker y Docker Compose para ejecutar tanto la aplicación FastAPI como la base de datos PostgreSQL en contenedores.
-
-### Requisitos Previos
-
-1. **Docker**: Instálalo desde [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)  
-2. **Docker Compose**: Suele instalarse junto con Docker. Confirma con:  
-   ```bash
-   docker-compose --version
-
-## Configuración de la Base de Datos
-
-### 1. Levantar PostgreSQL con Docker Compose
-
-El proyecto incluye un archivo `docker-compose.yml` para configurar la base de datos PostgreSQL. Sigue estos pasos:
-
-1. **Ejecuta Docker Compose:**
-   ```bash
-   docker-compose up -d
-
-
-Verificar la Base de Datos y Tablas
-Queremos asegurarnos de que el script init.sql que creamos anteriormente se ejecutó correctamente y las tablas existen.
-
-Conéctate al contenedor PostgreSQL usando psql:
-
-   ```bash
-  docker exec -it inventory_db psql -U postgres -d inventory
-
-
-
-
+```mermaid
+graph LR
+    User((Usuario)) -->|HTTP Requests| API[API RESTful]
+    API -->|CRUD| DB[(Base de Datos PostgreSQL)]
+    API -->|Respaldo Automático| Backup[Contenedor de Respaldos]
+    User -->|Pruebas de Carga| Locust[Pruebas de Carga]
+    API -->|Swagger UI| Docs[Documentación de la API]
+    Tests[Pruebas Automatizadas] -->|Cobertura y Validación| API
+```
 
 
 
