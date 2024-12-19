@@ -1,4 +1,5 @@
 services:
+  # Base de datos
   db:
     image: postgres:14
     container_name: inventory_db
@@ -13,6 +14,25 @@ services:
       - inventory_db_data:/var/lib/postgresql/data
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  # Automatización de respaldos
+  db_backup:
+    image: postgres:14
+    container_name: inventory_db_backup
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - inventory_db_backups:/backups
+    depends_on:
+      - db
+    entrypoint: >
+      bash -c "
+      apt-get update && apt-get install -y cron &&
+      echo '0 0 * * * PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST $DB_NAME > /backups/inventory_backup_$(date +\\%Y\\%m\\%d_\\%H\\%M\\%S).sql' | crontab - &&
+      cron -f
+      "
+
+  # RESTful API
   api:
     build: .
     container_name: inventory_api
@@ -32,6 +52,7 @@ services:
           cpus: "2.0"
           memory: "4g"
 
+  # Automatización de tests
   tests:
     build:
       context: .
@@ -48,6 +69,7 @@ services:
       - ./coverage:/app/htmlcov
     command: ["pytest", "--cov=app", "--cov-report=html", "tests/"]
 
+  # Tests de carga
   locust:
     image: locustio/locust
     container_name: locust
@@ -61,6 +83,5 @@ services:
 
 volumes:
   inventory_db_data:
+  inventory_db_backups:
   coverage:
-
-

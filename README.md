@@ -2,17 +2,48 @@
 
 ## Descripción
 
-Este proyecto tiene como objetivo desarrollar una API REST para la gestión del inventario de una cadena de tiendas minoristas. El sistema permitirá la creación, consulta, actualización y eliminación de productos, así como la gestión del inventario por tienda, incluyendo transferencias de stock y alertas por bajo inventario.
+Este proyecto consiste en una API REST para gestionar el inventario de una cadena de tiendas minoristas. Permite gestionar productos, transferir inventarios entre sucursales y configurar alertas de stock bajo.
 
-## Tecnologías a Utilizar
 
-- **Lenguaje:** Python 3.9+  
-- **Framework:** FastAPI  
-- **Base de Datos:** PostgreSQL  
+## Instrucciones de Instalación
+
+### Requisitos Previos
+1. **Instalar Docker y Docker Compose**:
+  Instálalos desde [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)  
+   - Asegúrate de tener Docker y Docker Compose instalados en tu máquina.
+   - Verifica que Docker esté funcionando ejecutando:
+     ```bash
+     docker --version
+     docker-compose --version
+     ```
+
+2. Clonar este repositorio:
+   ```bash
+   git clone https://github.com/ohsalmeron/Inventory-API.git
+   cd Inventory-API
+
+### Levantar los contenedores
+
+   - Ejecuta el siguiente comando para construir y levantar los contenedores:
+     ```bash
+     docker-compose up --build
+     ```
+
+El proyecto incluye un archivo `.env`, con las variables de entorno necesarias, además de una lista de requerimientos para python con las librerías utilizadas.
+
+
+
+## Tecnologías utilizadas
+
+- **Lenguaje:** Python
+- **Framework:** FastAPI
+- **Base de Datos:** PostgreSQL
 - **Contenedores:** Docker y Docker Compose  
 - **Documentación API:** OpenAPI/Swagger (generada automáticamente por FastAPI)  
-- **Testing:** Pytest (unitarias e integración), herramientas de carga (ej: Locust, Artillery)
+- **Testing:** Pytest (unitarias e integración), Locust como herramientas de carga
 - **Logs:** Formato JSON estructurado
+
+
 
 ## Preparación del Entorno con Docker
 

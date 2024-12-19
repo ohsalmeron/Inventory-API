@@ -12,5 +12,4 @@ COPY ./app ./app
 COPY ./tests ./tests
 COPY ./logging_config.json ./logging_config.json
 
-# Definir el comando por defecto (puede ser sobrescrito)
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--log-config", "./logging_config.json"]
