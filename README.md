@@ -270,9 +270,8 @@ graph LR
        port: 80
        targetPort: 8000
      type: LoadBalancer
+   ```
 
-     
-     ```
    - Aplicar la configuración:
      ```bash
      kubectl apply -f deployment.yaml
