@@ -71,3 +71,25 @@ def test_list_low_stock_alerts(client):
     product_alert = next((item for item in low_stock_data if item["product_id"] == product_id), None)
     assert product_alert is not None, f"Producto {product_id} no está en las alertas de stock bajo"
     assert product_alert["quantity"] < 5, "La cantidad no está por debajo del mínimo configurado"
+
+def test_transfer_insufficient_stock(client):
+    product_id = create_product_and_inventory(client)
+
+    # Intentar transferir más cantidad de la disponible
+    transfer_payload = {
+        "product_id": product_id,
+        "source_store_id": "store1",
+        "target_store_id": "store2",
+        "quantity": 15,  # Más de los 10 disponibles
+        "type": "TRANSFER"
+    }
+    response = client.post("/api/inventory/transfer", json=transfer_payload)
+    assert response.status_code == 400, f"Error esperado no ocurrió: {response.json()}"
+
+    # Validar el mensaje de error
+    assert "detail" in response.json(), "La respuesta no contiene el campo 'detail'"
+    error_detail = response.json()["detail"]
+    assert "message" in error_detail, "El detalle del error no contiene el campo 'message'"
+    assert error_detail["message"] == f"Insufficient stock in store store1. Available: 10, Required: 15", (
+        f"Mensaje de error incorrecto: {error_detail['message']}"
+    )
