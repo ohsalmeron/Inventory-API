@@ -67,9 +67,9 @@ Este proyecto consiste en una API REST para gestionar el inventario de una caden
   [http://localhost:8089/](http://localhost:8089/)
 
 - Se recomienda configurar las pruebas siguiendo las mejores prácticas:
-  - **Usuarios iniciales**: 10  
-  - **Incremento gradual**: Hasta un máximo de 100 usuarios simultáneos.
-  - **URL del servicio de la API** para las pruebas de carga: `http://inventory_api:8000`
+  - **Number of Users** (peak concurrency): 500 o más usuarios simultaneos
+  - **Ramp up** (users added per sec): De 10 hasta un máximo de 100 usuarios agregados por segundo.
+  - **Host** (URL interna de docker) para las pruebas de carga: `http://inventory_api:8000`
 
 ### 4. **Backups Automatizados**
 
@@ -99,10 +99,22 @@ Si necesitas realizar un respaldo manual, usa este comando:
   ls /backups
   ```
 
-  
+### 5. **Acceso y Verificación de la Base de Datos**
 
+- Para ingresar al contenedor de la base de datos y ejecutar comandos SQL manualmente, sigue estos pasos:
 
+1. Accede al contenedor de la base de datos:
+  ```bash
+  docker exec -it inventory_db bash
+  psql -U postgres -d inventory
+  ```
 
+Una vez dentro del cliente de PostgreSQL, puedes ejecutar comandos SQL. Por ejemplo:
+
+Mostrar todas las tablas:
+  ```bash
+  \dt
+  ```
 
 
 
