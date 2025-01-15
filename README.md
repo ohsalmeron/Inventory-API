@@ -332,13 +332,3 @@ graph LR
      ```plaintext
      http://IP:PUERTO
      ```
-
-
-### ¿Cuál opción se adapta más a tus necesidades?
-
-Soy Omar trabajo actualmente como Fullstack developer, soy un empleado versátil en quién puedes confiar para resolver temas de desarrollo, debuggeo, deployment, consultoría y arquitectura, con más de 12 años de experiencia en diferentes lenguajes y stacks, utilizo Inteligencia Artificial como una herramienta para optimizar y agilizar procesos.
-
-**Sigamos en contacto**:
-
-- Mi correo es `ohsalmeron@gmail.com`
-- Mi teléfono personal es `+52 3338088434`
